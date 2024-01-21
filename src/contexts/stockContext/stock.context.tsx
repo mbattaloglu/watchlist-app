@@ -1,10 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { StockAPIStock } from "../../types/StockAPIResult";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
+import { ModalContext } from "../modalContext/modal.context";
 
 type StockContextProps = {
   stocks: StockAPIStock[];
-  addToStocks: (stock: StockAPIStock) => void;
+  addToStocks: (symbol: string) => void;
   removeFromStocks: (symbol: string) => void;
   cleanStocks: () => void;
 };
@@ -33,6 +34,8 @@ const StockContext = createContext<StockContextProps>({
 
 const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
   const [stocks, setStocks] = useState<StockAPIStock[]>([]);
+  const modalContext = useContext(ModalContext);
+  const { setModal } = modalContext;
 
   useEffect(() => {
     const stocksFromLocalStorage = localStorage.getItem("stocks");
@@ -72,16 +75,28 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const addToStocks = (stock: StockAPIStock) => {
-    setStocks((prevStocks) => {
-      const updatedStocks = [...prevStocks, stock];
-      const stocks: StockLocalStorage = {
-        stocks: updatedStocks,
-        lastSaved: new Date(),
-      };
-      localStorage.setItem("stocks", JSON.stringify(stocks));
-      return updatedStocks;
-    });
+  const addToStocks = (symbol: string): void => {
+    fetchStockData([symbol])
+      .then((data) => {
+        setStocks((prevStocks) => {
+          if (data.quoteResponse) {
+            const updatedStocks = [...prevStocks, data.quoteResponse.result[0]];
+            const stocks: StockLocalStorage = {
+              stocks: updatedStocks,
+              lastSaved: new Date(),
+            };
+            localStorage.setItem("stocks", JSON.stringify(stocks));
+            return updatedStocks;
+          } else {
+            setModal("Error", "Stock cannot be added.");
+            return prevStocks;
+          }
+        });
+      })
+      .catch((error: Error) => {
+        setModal("Error", `Stock cannot be added.\n${error}`);
+        console.error(error);
+      });
   };
 
   const removeFromStocks = (symbol: string) => {
@@ -107,7 +122,12 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
 
   return (
     <StockContext.Provider
-      value={{ stocks, addToStocks, removeFromStocks, cleanStocks }}
+      value={{
+        stocks,
+        addToStocks,
+        removeFromStocks,
+        cleanStocks,
+      }}
     >
       {children}
     </StockContext.Provider>

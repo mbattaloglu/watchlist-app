@@ -7,15 +7,15 @@ import { ModalProvider } from "./contexts/modalContext/modal.context";
 
 const App: React.FC = () => {
   return (
-    <StockProvider>
-      <ModalProvider>
+    <ModalProvider>
+      <StockProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/watchlist" element={<Watchlist />} />
         </Routes>
-      </ModalProvider>
-    </StockProvider>
+      </StockProvider>
+    </ModalProvider>
   );
 };
 

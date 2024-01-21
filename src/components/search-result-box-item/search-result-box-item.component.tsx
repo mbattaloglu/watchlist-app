@@ -26,7 +26,7 @@ const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
     if (checkboxRef.current) {
       const checkboxObservable$ = fromEvent(checkboxRef.current, "change");
       const checkboxObserver = createCheckboxObserver(
-        stock,
+        stock.symbol,
         addToStocks,
         removeFromStocks,
         setModal,

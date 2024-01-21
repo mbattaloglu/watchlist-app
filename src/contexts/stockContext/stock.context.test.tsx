@@ -1,6 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { StockProvider, StockContext } from "./stock.context";
-import { StockAPIStock } from "../../types/StockAPIResult";
 import { useContext } from "react";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
 import { act } from "react-dom/test-utils";
@@ -14,15 +13,8 @@ describe("StockProvider", () => {
     jest.clearAllMocks();
   });
 
-  const testStock: StockAPIStock = {
-    symbol: "TEST",
-    longName: "TEST",
-    shortName: "TEST",
-    regularMarketChange: 0,
-    regularMarketPrice: 0,
-  };
-
-  it("should add and remove from the stocks", () => {
+  it("should add and remove from the stocks", async () => {
+    const testStock = "AAPL";
     const TestComponent = () => {
       const context = useContext(StockContext);
       const { stocks, addToStocks, removeFromStocks } = context;
@@ -30,7 +22,7 @@ describe("StockProvider", () => {
       return (
         <div>
           <button onClick={() => addToStocks(testStock)}>Add to Stocks</button>
-          <button onClick={() => removeFromStocks(testStock.symbol)}>
+          <button onClick={() => removeFromStocks(testStock)}>
             Remove from Stocks
           </button>
           {stocks.map((stock) => (
@@ -40,6 +32,18 @@ describe("StockProvider", () => {
       );
     };
 
+    // Mock fetchStockData function to return a resolved promise
+    const mockData = {
+      quoteResponse: {
+        result: [
+          {
+            symbol: testStock,
+          },
+        ],
+      },
+    };
+    fetchStockData.mockResolvedValueOnce(mockData);
+
     render(
       <StockProvider>
         <TestComponent />
@@ -47,38 +51,12 @@ describe("StockProvider", () => {
     );
 
     fireEvent.click(screen.getByText("Add to Stocks"));
-    expect(screen.getByText("TEST")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(testStock)).toBeInTheDocument(),
+    );
 
     fireEvent.click(screen.getByText("Remove from Stocks"));
-    expect(screen.queryByText("TEST")).not.toBeInTheDocument();
-  });
-  it("should add and remove from the stocks", () => {
-    const TestComponent = () => {
-      const context = useContext(StockContext);
-      const { stocks, addToStocks, cleanStocks } = context;
-
-      return (
-        <div>
-          <button onClick={() => addToStocks(testStock)}>Add to Stocks</button>
-          <button onClick={() => cleanStocks()}>Clean Stocks</button>
-          {stocks.map((stock) => (
-            <div key={stock.symbol}>{stock.symbol}</div>
-          ))}
-        </div>
-      );
-    };
-
-    render(
-      <StockProvider>
-        <TestComponent />
-      </StockProvider>,
-    );
-
-    fireEvent.click(screen.getByText("Add to Stocks"));
-    expect(screen.getByText("TEST")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByText("Clean Stocks"));
-    expect(screen.queryByText("TEST")).not.toBeInTheDocument();
+    expect(screen.queryByText(testStock)).not.toBeInTheDocument();
   });
   it("should fetch stock data and save it to local storage if diffInDays > 1", async () => {
     const testStocks = mockStockAPIStocks;

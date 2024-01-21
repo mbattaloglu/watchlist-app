@@ -1,7 +1,4 @@
 import { createCheckboxObserver } from "./search-result-item-observers";
-import fetchStockData from "../../../utils/fetchStockData/fetchStockData";
-
-jest.mock("../../../utils/fetchStockData/fetchStockData");
 
 // Mock the console.error function to prevent error logs during testing
 console.error = jest.fn();
@@ -10,27 +7,23 @@ console.error = jest.fn();
 console.log = jest.fn();
 
 describe("createCheckboxObserver", () => {
-  const mockStock = { symbol: "AAPL" };
+  const mockStockSymbol = "test";
   const addToStocks = jest.fn();
   const removeFromStocks = jest.fn();
   const setModal = jest.fn();
 
   const observer = createCheckboxObserver(
-    mockStock,
+    mockStockSymbol,
     addToStocks,
     removeFromStocks,
     setModal,
   );
 
-  it("should add to watchlist and fetch stock data when next is called with a checked event", async () => {
+  it("should add to watchlist and fetch stock data when next is called with a checked event", () => {
     const mockEvent = { target: { checked: true } };
-    const mockData = { quoteResponse: { result: [mockStock] } };
 
-    (fetchStockData as jest.Mock).mockResolvedValue(mockData);
-
-    await observer.next(mockEvent);
-    expect(fetchStockData).toHaveBeenCalledWith([mockStock.symbol]);
-    expect(addToStocks).toHaveBeenCalledWith(mockStock);
+    observer.next(mockEvent);
+    expect(addToStocks).toHaveBeenCalledWith(mockStockSymbol);
   });
 
   it("should remove from watchlist and stocks when next is called with an unchecked event", () => {
@@ -38,21 +31,8 @@ describe("createCheckboxObserver", () => {
 
     observer.next(mockEvent);
 
-    expect(removeFromStocks).toHaveBeenCalledWith(mockStock.symbol);
+    expect(removeFromStocks).toHaveBeenCalledWith(mockStockSymbol);
   });
-
-  it("should set modal and log an error when next is called and fetchStockData rejects", async () => {
-    const mockEvent = { target: { checked: true } };
-    const error = new Error("Test error");
-
-    (fetchStockData as jest.Mock).mockRejectedValue(error);
-
-    await observer.next(mockEvent);
-
-    expect(setModal).toHaveBeenCalledWith("Error", error.message);
-    expect(console.error).toHaveBeenCalledWith(error);
-  });
-
   it("should log an error when error is called", () => {
     const error = new Error("Test error");
 

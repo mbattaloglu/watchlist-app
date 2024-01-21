@@ -18,10 +18,6 @@ export interface StockAPIErrorInfo {
   description: string;
 }
 
-//regularMarketPrice
-//regularMarketChange
-//regularMarketChangePercent
-//regularMarketPreviousClose
 export interface StockAPIStock {
   symbol: string;
   shortName: string;

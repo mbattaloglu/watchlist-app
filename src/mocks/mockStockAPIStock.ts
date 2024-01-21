@@ -1,6 +1,6 @@
 import { StockAPIStock } from "../types/StockAPIResult";
 
-const stock: StockAPIStock = {
+const mockStockAPIStock: StockAPIStock = {
   longName: "Apple Inc.",
   shortName: "Apple Inc.",
   regularMarketPrice: 185.59,
@@ -8,4 +8,4 @@ const stock: StockAPIStock = {
   symbol: "AAPL",
 };
 
-export default stock;
+export default mockStockAPIStock;

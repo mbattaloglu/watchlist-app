@@ -1,6 +1,6 @@
 import { SearchAPIResult } from "../types/SearchAPIResult";
 
-const apiSearchResult: SearchAPIResult = {
+const mockSearchAPIResult: SearchAPIResult = {
   ResultSet: {
     Result: [
       {
@@ -16,4 +16,4 @@ const apiSearchResult: SearchAPIResult = {
   },
 };
 
-export default apiSearchResult;
+export default mockSearchAPIResult;

@@ -1,6 +1,6 @@
 import { createRemoveButtonObserver } from "./watchlist-table-item.observer";
-import stock from "../../../mocks/stock";
-import watchlist from "../../../mocks/watchlist";
+import mockStockAPIStock from "../../../mocks/mockStockAPIStock";
+import mockWatchlist from "../../../mocks/mockWatchlist";
 
 describe("createRemoveButtonObserver", () => {
   it("calls removeFromStocks and removeFromWatchlist when next is called", () => {
@@ -8,7 +8,7 @@ describe("createRemoveButtonObserver", () => {
     const mockRemoveFromWatchlist = jest.fn();
     const mockSetModal = jest.fn();
     const observer = createRemoveButtonObserver(
-      stock.symbol,
+      mockStockAPIStock.symbol,
       mockRemoveFromStocks,
       mockRemoveFromWatchlist,
       mockSetModal,
@@ -16,8 +16,10 @@ describe("createRemoveButtonObserver", () => {
 
     observer.next();
 
-    expect(mockRemoveFromStocks).toHaveBeenCalledWith(stock.symbol);
-    expect(mockRemoveFromWatchlist).toHaveBeenCalledWith(stock.symbol);
+    expect(mockRemoveFromStocks).toHaveBeenCalledWith(mockStockAPIStock.symbol);
+    expect(mockRemoveFromWatchlist).toHaveBeenCalledWith(
+      mockStockAPIStock.symbol,
+    );
   });
   it("calls setModal when error is called", () => {
     const mockRemoveFromStocks = jest.fn();
@@ -25,7 +27,7 @@ describe("createRemoveButtonObserver", () => {
     const mockSetModal = jest.fn();
 
     const observer = createRemoveButtonObserver(
-      stock.symbol,
+      mockStockAPIStock.symbol,
       mockRemoveFromStocks,
       mockRemoveFromWatchlist,
       mockSetModal,
@@ -42,10 +44,10 @@ describe("createRemoveButtonObserver", () => {
     const mockSetModal = jest.fn();
 
     const observer = createRemoveButtonObserver(
-      stock,
+      mockStockAPIStock,
       mockRemoveFromStocks,
       mockRemoveFromWatchlist,
-      watchlist,
+      mockWatchlist,
       mockSetModal,
     );
 

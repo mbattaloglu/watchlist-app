@@ -1,6 +1,6 @@
 import { StockAPIStock } from "../types/StockAPIResult";
 
-const stocks: StockAPIStock[] = [
+const mockStockAPIStocks: StockAPIStock[] = [
   {
     longName: "3M Company",
     shortName: "3M Company",
@@ -17,4 +17,4 @@ const stocks: StockAPIStock[] = [
   },
 ];
 
-export default stocks;
+export default mockStockAPIStocks;

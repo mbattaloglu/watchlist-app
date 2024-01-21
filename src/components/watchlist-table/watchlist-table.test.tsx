@@ -9,8 +9,8 @@ import {
 } from "../../contexts/stockContext/stock.context";
 import WatchlistTable from "./watchlist-table.component";
 import { ModalProvider } from "../../contexts/modalContext/modal.context";
-import watchlist from "../../mocks/watchlist";
-import stocks from "../../mocks/stockRecord";
+import mockWatchlist from "../../mocks/mockWatchlist";
+import mockStockRecord from "../../mocks/mockStockRecord";
 
 describe("watchlist-table test suite", () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe("watchlist-table test suite", () => {
     const { container } = render(
       <WatchlistContext.Provider
         value={{
-          watchlist: watchlist,
+          watchlist: mockWatchlist,
           addToWatchlist: jest.fn(),
           removeFromWatchlist: jest.fn(),
           cleanWatchlist: jest.fn(),
@@ -30,7 +30,7 @@ describe("watchlist-table test suite", () => {
       >
         <StockContext.Provider
           value={{
-            stocks: stocks.stocks,
+            stocks: mockStockRecord.stocks,
             addToStocks: jest.fn(),
             removeFromStocks: jest.fn(),
             cleanStocks: jest.fn(),

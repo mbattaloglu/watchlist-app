@@ -1,6 +1,6 @@
 import { SearchAPIStock } from "../types/SearchAPIResult";
 
-const watchlist: SearchAPIStock[] = [
+const mockWatchlist: SearchAPIStock[] = [
   {
     symbol: "NVDA",
     name: "NVIDIA Corporation",
@@ -35,4 +35,4 @@ const watchlist: SearchAPIStock[] = [
   },
 ];
 
-export default watchlist;
+export default mockWatchlist;

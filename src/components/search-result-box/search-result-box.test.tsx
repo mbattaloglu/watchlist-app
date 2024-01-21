@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import SearchResultBox from "./search-result-box.component";
-import apiSearchResult from "../../mocks/apiSearchResult";
+import mockSearchAPIResult from "../../mocks/mockSearchAPIResult";
 import { WatchlistProvider } from "../../contexts/watchlistContext/watchlist.context";
 import { StockProvider } from "../../contexts/stockContext/stock.context";
 import React from "react";
@@ -20,7 +20,7 @@ describe("search-result-box test suite", () => {
           <ModalProvider>
             <SearchResultBox
               error={null}
-              apiSearchResults={apiSearchResult}
+              apiSearchResults={mockSearchAPIResult}
               searchInputRef={searchInputMockRef}
               searchResultBoxRef={searchResultBoxMockRef}
               searchText="null"
@@ -31,16 +31,18 @@ describe("search-result-box test suite", () => {
     );
     expect(container).toBeTruthy();
     expect(
-      screen.getByText(apiSearchResult.ResultSet?.Result[0].name as string),
+      screen.getByText(mockSearchAPIResult.ResultSet?.Result[0].name as string),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(apiSearchResult.ResultSet?.Result[0].symbol as string),
+      screen.getByText(
+        mockSearchAPIResult.ResultSet?.Result[0].symbol as string,
+      ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(apiSearchResult.ResultSet?.Result[0].exch as string),
+      screen.getByText(mockSearchAPIResult.ResultSet?.Result[0].exch as string),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(apiSearchResult.ResultSet?.Result[0].type as string),
+      screen.getByText(mockSearchAPIResult.ResultSet?.Result[0].type as string),
     ).toBeInTheDocument();
   });
   it("should render the search-result-box with error", () => {

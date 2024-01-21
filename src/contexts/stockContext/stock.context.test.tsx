@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { StockProvider, StockContext } from "./stock.context";
-import { Stock } from "../../types/APIStockResult";
+import { StockAPIStock } from "../../types/StockAPIResult";
 import { useContext } from "react";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
 import { act } from "react-dom/test-utils";
-import stocks from "../../mocks/stocks";
+import mockStockAPIStocks from "../../mocks/mockStockAPIStocks";
 
 jest.mock("../../utils/fetchStockData/fetchStockData");
 
@@ -14,11 +14,12 @@ describe("StockProvider", () => {
     jest.clearAllMocks();
   });
 
-  const testStock: Stock = {
+  const testStock: StockAPIStock = {
     symbol: "TEST",
+    longName: "TEST",
+    shortName: "TEST",
     regularMarketChange: 0,
-    regularMarketChangePercent: 0,
-    regularMarketOpen: 0,
+    regularMarketPrice: 0,
   };
 
   it("should add and remove from the stocks", () => {
@@ -80,7 +81,7 @@ describe("StockProvider", () => {
     expect(screen.queryByText("TEST")).not.toBeInTheDocument();
   });
   it("should fetch stock data and save it to local storage if diffInDays > 1", async () => {
-    const testStocks = stocks;
+    const testStocks = mockStockAPIStocks;
 
     const oldDate = new Date();
     oldDate.setDate(oldDate.getDate() - 2); // set the date to 2 days ago
@@ -116,7 +117,7 @@ describe("StockProvider", () => {
     );
   });
   it("should directly set the stock data from local storage if diffInDays < 1", async () => {
-    const testStocks = stocks;
+    const testStocks = mockStockAPIStocks;
 
     const localStorageMock = {
       stocks: testStocks,

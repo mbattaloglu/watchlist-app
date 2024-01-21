@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { WatchlistProvider } from "../../contexts/watchlistContext/watchlist.context";
 import { StockProvider } from "../../contexts/stockContext/stock.context";
 import WatchlistTableItem from "./watchlist-table-item.component";
-import stock from "../../mocks/stock";
+import mockStockAPIStock from "../../mocks/mockStockAPIStock";
 import { ModalProvider } from "../../contexts/modalContext/modal.context";
 
 describe("watchlist-table-item test suite", () => {
@@ -13,7 +13,7 @@ describe("watchlist-table-item test suite", () => {
           <ModalProvider>
             <table>
               <tbody>
-                <WatchlistTableItem stock={stock} />
+                <WatchlistTableItem stock={mockStockAPIStock} />
               </tbody>
             </table>
           </ModalProvider>

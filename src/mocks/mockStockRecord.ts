@@ -5,7 +5,7 @@ export type StockRecord = {
   lastSaved: string;
 };
 
-const stocks: StockRecord = {
+const mockStockRecord: StockRecord = {
   stocks: [
     {
       regularMarketPrice: 531.4,
@@ -18,4 +18,4 @@ const stocks: StockRecord = {
   lastSaved: "2024-01-10T12:39:43.690Z",
 };
 
-export default stocks;
+export default mockStockRecord;

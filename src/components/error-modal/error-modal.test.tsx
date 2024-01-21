@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import ErrorModal from "./error-modal.component";
 
-describe("warn-modal test suite", () => {
+describe("error-modal test suite", () => {
   it("should render correctly", () => {
     const { container } = render(
       <ErrorModal title="Test Title" description="Test Description" />,

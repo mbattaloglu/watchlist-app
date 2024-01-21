@@ -8,7 +8,7 @@ console.error = jest.fn();
 console.log = jest.fn();
 
 describe("search-input createSearchObserver test suite", () => {
-  it("calls the provided functions when next is called", () => {
+  it("should call the provided functions when next is called", () => {
     const mockCallApi = jest.fn();
     const mockSetModal = jest.fn();
     const observer = createSearchObserver(mockCallApi, mockSetModal);
@@ -16,7 +16,7 @@ describe("search-input createSearchObserver test suite", () => {
     observer.next("apple");
     expect(mockCallApi).toBeCalledWith("apple");
   });
-  it("calls the provided functions when error is called", () => {
+  it("should call the provided functions when error is called", () => {
     const mockCallApi = jest.fn();
     const mockSetModal = jest.fn();
     const observer = createSearchObserver(mockCallApi, mockSetModal);
@@ -24,7 +24,7 @@ describe("search-input createSearchObserver test suite", () => {
     observer.error(new Error("Testing Error"));
     expect(mockSetModal).toBeCalledWith("Error", "Testing Error");
   });
-  it("calls the provided functions when complete is called", () => {
+  it("should call the provided functions when complete is called", () => {
     const mockCallApi = jest.fn();
     const mockSetModal = jest.fn();
     const observer = createSearchObserver(mockCallApi, mockSetModal);
@@ -36,7 +36,7 @@ describe("search-input createSearchObserver test suite", () => {
 });
 
 describe("search-input createSearchResultBoxObserver test suite", () => {
-  it('calls the provided functions with "block" when next is called with a string', () => {
+  it('should call the provided functions with "block" when next is called with a string', () => {
     const mockElement = document.createElement("div");
     mockElement.style.display = "none";
     const mockSetSearchText = jest.fn();
@@ -55,7 +55,7 @@ describe("search-input createSearchResultBoxObserver test suite", () => {
       display: "block",
     });
   });
-  it("calls the provided functions when error is called", () => {
+  it("should call the provided functions when error is called", () => {
     const mockElement = document.createElement("div");
     const mockSetSearchText = jest.fn();
     const mockSetModal = jest.fn();
@@ -70,7 +70,7 @@ describe("search-input createSearchResultBoxObserver test suite", () => {
     observer.error(new Error("Testing Error"));
     expect(mockSetModal).toBeCalledWith("Error", "Testing Error");
   });
-  it("calls the provided functions when complete is called", () => {
+  it("should call the provided functions when complete is called", () => {
     const mockElement = document.createElement("div");
     const mockSetSearchText = jest.fn();
     const mockChangeSearchBoxDisplay = jest.fn();
@@ -91,7 +91,7 @@ describe("search-input createSearchResultBoxObserver test suite", () => {
 });
 
 describe("navbar createOutsideClickObserver test suite", () => {
-  it("calls the provided functions when next is called", () => {
+  it("should call the provided functions when next is called", () => {
     const mockElement = document.createElement("div");
     const observer = createOutsideClickObserver(mockElement);
 
@@ -100,7 +100,7 @@ describe("navbar createOutsideClickObserver test suite", () => {
       display: "none",
     });
   });
-  it("calls the provided functions when error is called", () => {
+  it("should call the provided functions when error is called", () => {
     const mockElement = document.createElement("div");
     const observer = createOutsideClickObserver(mockElement);
 
@@ -108,7 +108,7 @@ describe("navbar createOutsideClickObserver test suite", () => {
 
     expect(console.error).toBeCalledWith(new Error("Testing Error"));
   });
-  it("calls the provided functions when complete is called", () => {
+  it("should call the provided functions when complete is called", () => {
     const mockElement = document.createElement("div");
     const observer = createOutsideClickObserver(mockElement);
 

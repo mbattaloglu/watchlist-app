@@ -1,6 +1,6 @@
 import { SearchAPIStock } from "../types/SearchAPIResult";
 
-const stockSearchResult: SearchAPIStock = {
+const mockSearchAPIStock: SearchAPIStock = {
   exch: "NAS",
   exchDisp: "NASDAQ",
   name: "Apple Inc.",
@@ -9,4 +9,4 @@ const stockSearchResult: SearchAPIStock = {
   typeDisp: "Equity",
 };
 
-export default stockSearchResult;
+export default mockSearchAPIStock;

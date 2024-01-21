@@ -1,0 +1,32 @@
+.search-input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  width: 40rem;
+  outline: none;
+  font-size: 1.2rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .search-input {
+    width: 30rem;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .search-input {
+    width: 20rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-input {
+    width: 10rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .search-input {
+    width: 5rem;
+  }
+}

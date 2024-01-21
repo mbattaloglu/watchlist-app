@@ -1,0 +1,79 @@
+@use "../../themes/theme.module.scss";
+
+.search-bar {
+  .search-result-box {
+    display: none;
+    position: absolute;
+    top: 3.6rem;
+    width: 40rem;
+    height: 19rem;
+    color: theme.$primary-light-color;
+    background-color: theme.$secondary-light-color;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+    overflow-y: scroll;
+
+    .result-box-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: black;
+    }
+  }
+}
+
+.silent {
+  color: theme.$neutral-color;
+  font-size: 0.8rem;
+}
+
+@media screen and (max-width: 1200px) {
+  .search-bar {
+    input[type="text"] {
+      width: 30rem;
+    }
+
+    .search-result-box {
+      width: 30rem;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .search-bar {
+    input[type="text"] {
+      width: 20rem;
+    }
+
+    .search-result-box {
+      width: 20rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-bar {
+    input[type="text"] {
+      width: 10rem;
+    }
+
+    .search-result-box {
+      width: 10rem;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .search-bar {
+    input[type="text"] {
+      width: 5rem;
+    }
+
+    .search-result-box {
+      width: 5rem;
+    }
+  }
+}

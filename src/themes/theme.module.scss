@@ -1,0 +1,20 @@
+$primary-light-color: #0766ad;
+$secondary-light-color: #fff;
+$increase-color: #0f6800;
+$decrease-color: #d92c40;
+$neutral-color: #585858;
+$danger-color: #dc3545;
+$danger-color-hover: #c82333;
+$danger-color-border: #bd2130;
+
+.increment {
+  color: $increase-color;
+}
+
+.decrement {
+  color: $decrease-color;
+}
+
+.neutral {
+  color: $neutral-color;
+}

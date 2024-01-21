@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { APISearchResult } from "../../types/APISearchResult";
+import { SearchAPIResult } from "../../types/SearchAPIResult";
 import SearchResultBoxItem from "../search-result-box-item/search-result-box-item.component";
 import styles from "./search-result.box.module.scss";
 
 type SearchResultBoxProps = {
-  apiSearchResults: APISearchResult | null;
+  apiSearchResults: SearchAPIResult | null;
   error: Error | null;
   loading: boolean;
   resultBox: React.RefObject<HTMLDivElement>;

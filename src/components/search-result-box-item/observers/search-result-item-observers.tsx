@@ -1,11 +1,11 @@
-import { StockSearchResult } from "../../../types/APISearchResult";
-import { Stock } from "../../../types/APIStockResult";
+import { SearchAPIStock } from "../../../types/SearchAPIResult";
+import { StockAPIStock } from "../../../types/StockAPIResult";
 import fetchStockData from "../../../utils/fetchStockData/fetchStockData";
 
 export const createCheckboxObserver = (
-  stock: StockSearchResult,
-  addToWatchlist: (stock: StockSearchResult) => void,
-  addToStocks: (stock: Stock) => void,
+  stock: SearchAPIStock,
+  addToWatchlist: (stock: SearchAPIStock) => void,
+  addToStocks: (stock: StockAPIStock) => void,
   removeFromWatchlist: (symbol: string) => void,
   removeFromStocks: (symbol: string) => void,
   setModal: (title: string, description: string) => void,

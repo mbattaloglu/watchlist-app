@@ -1,9 +1,9 @@
-import { APISearchResult } from "../../types/APISearchResult";
+import { SearchAPIResult } from "../../types/SearchAPIResult";
 import isValid from "../isValidString/isValid";
 
 const fetchSearchResults = async (
   searchText: string,
-): Promise<APISearchResult> => {
+): Promise<SearchAPIResult> => {
   const apiKey = process.env.REACT_APP_API_KEY_THREE;
   if (!apiKey) {
     throw new Error("API Key not found");
@@ -43,7 +43,7 @@ const fetchSearchResults = async (
   if (!response.ok) {
     throw new Error("Response failed. Please try again later.");
   } else {
-    const data: APISearchResult = await response.json();
+    const data: SearchAPIResult = await response.json();
     return data;
   }
 };

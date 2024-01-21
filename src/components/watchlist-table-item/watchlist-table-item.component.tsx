@@ -3,13 +3,13 @@ import styles from "./watchlist-table.module.scss";
 import { WatchlistContext } from "../../contexts/watchlistContext/watchlist.context";
 import { fromEvent } from "rxjs";
 import { StockContext } from "../../contexts/stockContext/stock.context";
-import { Stock } from "../../types/APIStockResult";
+import { StockAPIStock } from "../../types/StockAPIResult";
 import { ModalContext } from "../../contexts/modalContext/modal.context";
 import giveColor from "../../utils/giveColor/giveColor";
 import { createRemoveButtonObserver } from "./observers/watchlist-table-item.observer";
 
 type WatchlistTableItemProps = {
-  stock: Stock;
+  stock: StockAPIStock;
 };
 
 const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
@@ -47,7 +47,7 @@ const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
         <h4>{stock.shortName}</h4>
         <p className="silent">{stock.symbol}</p>
       </td>
-      <td>{stock.regularMarketOpen.toFixed(2)}</td>
+      <td>{stock.regularMarketPrice.toFixed(2)}</td>
       <td
         className={`${styles["bold-text"]} ${giveColor(
           stock.regularMarketChange,

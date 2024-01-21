@@ -1,6 +1,6 @@
-import { StockSearchResult } from "../types/APISearchResult";
+import { SearchAPIStock } from "../types/SearchAPIResult";
 
-const watchlist: StockSearchResult[] = [
+const watchlist: SearchAPIStock[] = [
   {
     symbol: "NVDA",
     name: "NVIDIA Corporation",

@@ -1,14 +1,14 @@
 import { useContext, useEffect, useRef } from "react";
 import styles from "./search-result-box-item.module.scss";
 import { WatchlistContext } from "../../contexts/watchlistContext/watchlist.context";
-import { StockSearchResult } from "../../types/APISearchResult";
+import { SearchAPIStock } from "../../types/SearchAPIResult";
 import { fromEvent } from "rxjs";
 import { StockContext } from "../../contexts/stockContext/stock.context";
 import { ModalContext } from "../../contexts/modalContext/modal.context";
 import { createCheckboxObserver } from "./observers/search-result-item-observers";
 
 type SearchResultBoxItemProps = {
-  stock: StockSearchResult;
+  stock: SearchAPIStock;
 };
 
 const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
@@ -21,7 +21,7 @@ const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
   const { addToStocks, removeFromStocks } = stockContext;
   const { setModal } = modalContext;
 
-  const isChecked = (stock: StockSearchResult) => {
+  const isChecked = (stock: SearchAPIStock) => {
     return watchlist.some((s) => s.symbol === stock.symbol);
   };
 

@@ -1,12 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { APISearchResult } from "../../types/APISearchResult";
+import { SearchAPIResult } from "../../types/SearchAPIResult";
 import fetchSearchResults from "../../utils/fetchSearchResults/fetchSearchResults";
 import { ModalContext } from "../../contexts/modalContext/modal.context";
 
 const useSearch = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [apiSearchResults, setApiSearchResults] =
-    useState<APISearchResult | null>(null);
+    useState<SearchAPIResult | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [searchText, setSearchText] = useState<string>("");
   const firstRender = useRef(true);

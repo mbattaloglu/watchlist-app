@@ -1,8 +1,8 @@
-import { APIStockResult } from "../../types/APIStockResult";
+import { StockAPIResult } from "../../types/StockAPIResult";
 
 const fetchStockData = async (
   stockSymbols: string[],
-): Promise<APIStockResult> => {
+): Promise<StockAPIResult> => {
   const apiKey = process.env.REACT_APP_API_KEY_THREE;
   if (!apiKey) {
     throw new Error("API Key not found");
@@ -34,7 +34,7 @@ const fetchStockData = async (
   if (!response.ok) {
     throw new Error("Response failed. Please try again later.");
   } else {
-    const data: APIStockResult = await response.json();
+    const data: StockAPIResult = await response.json();
     return data;
   }
 };

@@ -1,6 +1,6 @@
-import { APISearchResult } from "../types/APISearchResult";
+import { SearchAPIResult } from "../types/SearchAPIResult";
 
-const apiSearchResult: APISearchResult = {
+const apiSearchResult: SearchAPIResult = {
   ResultSet: {
     Result: [
       {

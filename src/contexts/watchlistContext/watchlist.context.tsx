@@ -1,9 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
-import { StockSearchResult } from "../../types/APISearchResult";
+import { SearchAPIStock } from "../../types/SearchAPIResult";
 
 type WatchlistContextProps = {
-  watchlist: StockSearchResult[];
-  addToWatchlist: (stock: StockSearchResult) => void;
+  watchlist: SearchAPIStock[];
+  addToWatchlist: (stock: SearchAPIStock) => void;
   removeFromWatchlist: (symbol: string) => void;
   cleanWatchlist: () => void;
 };
@@ -26,7 +26,7 @@ const WatchlistContext = createContext<WatchlistContextProps>({
 });
 
 const WatchlistProvider: React.FC<WatchlistProviderProps> = ({ children }) => {
-  const [watchlist, setWatchlist] = useState<StockSearchResult[]>([]);
+  const [watchlist, setWatchlist] = useState<SearchAPIStock[]>([]);
 
   useEffect(() => {
     const watchlistFromLocalStorage = localStorage.getItem("watchlist");
@@ -38,7 +38,7 @@ const WatchlistProvider: React.FC<WatchlistProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const addToWatchlist = (stock: StockSearchResult) => {
+  const addToWatchlist = (stock: SearchAPIStock) => {
     //we need to do it like this because of the async behavior of useState
     setWatchlist((prevWatchlist) => {
       const updatedWatchlist = [...prevWatchlist, stock];

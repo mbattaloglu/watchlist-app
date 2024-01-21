@@ -1,6 +1,6 @@
-import { StockSearchResult } from "../types/APISearchResult";
+import { SearchAPIStock } from "../types/SearchAPIResult";
 
-const stockSearchResult: StockSearchResult = {
+const stockSearchResult: SearchAPIStock = {
   exch: "NAS",
   exchDisp: "NASDAQ",
   name: "Apple Inc.",

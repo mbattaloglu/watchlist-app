@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState } from "react";
-import { Stock } from "../../types/APIStockResult";
+import { StockAPIStock } from "../../types/StockAPIResult";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
 
 type StockContextProps = {
-  stocks: Stock[];
-  addToStocks: (stock: Stock) => void;
+  stocks: StockAPIStock[];
+  addToStocks: (stock: StockAPIStock) => void;
   removeFromStocks: (symbol: string) => void;
   cleanStocks: () => void;
 };
@@ -14,7 +14,7 @@ type StockProviderProps = {
 };
 
 type StockLocalStorage = {
-  stocks: Stock[];
+  stocks: StockAPIStock[];
   lastSaved: Date;
 };
 
@@ -32,7 +32,7 @@ const StockContext = createContext<StockContextProps>({
 });
 
 const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
-  const [stocks, setStocks] = useState<Stock[]>([]);
+  const [stocks, setStocks] = useState<StockAPIStock[]>([]);
 
   useEffect(() => {
     const stocksFromLocalStorage = localStorage.getItem("stocks");
@@ -72,7 +72,7 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const addToStocks = (stock: Stock) => {
+  const addToStocks = (stock: StockAPIStock) => {
     setStocks((prevStocks) => {
       const updatedStocks = [...prevStocks, stock];
       const stocks: StockLocalStorage = {

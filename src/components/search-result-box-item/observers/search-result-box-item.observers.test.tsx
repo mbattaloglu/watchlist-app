@@ -11,17 +11,13 @@ console.log = jest.fn();
 
 describe("createCheckboxObserver", () => {
   const mockStock = { symbol: "AAPL" };
-  const addToWatchlist = jest.fn();
   const addToStocks = jest.fn();
-  const removeFromWatchlist = jest.fn();
   const removeFromStocks = jest.fn();
   const setModal = jest.fn();
 
   const observer = createCheckboxObserver(
     mockStock,
-    addToWatchlist,
     addToStocks,
-    removeFromWatchlist,
     removeFromStocks,
     setModal,
   );
@@ -33,8 +29,6 @@ describe("createCheckboxObserver", () => {
     (fetchStockData as jest.Mock).mockResolvedValue(mockData);
 
     await observer.next(mockEvent);
-
-    expect(addToWatchlist).toHaveBeenCalledWith(mockStock);
     expect(fetchStockData).toHaveBeenCalledWith([mockStock.symbol]);
     expect(addToStocks).toHaveBeenCalledWith(mockStock);
   });
@@ -44,7 +38,6 @@ describe("createCheckboxObserver", () => {
 
     observer.next(mockEvent);
 
-    expect(removeFromWatchlist).toHaveBeenCalledWith(mockStock.symbol);
     expect(removeFromStocks).toHaveBeenCalledWith(mockStock.symbol);
   });
 

@@ -4,9 +4,7 @@ import fetchStockData from "../../../utils/fetchStockData/fetchStockData";
 
 export const createCheckboxObserver = (
   stock: SearchAPIStock,
-  addToWatchlist: (stock: SearchAPIStock) => void,
   addToStocks: (stock: StockAPIStock) => void,
-  removeFromWatchlist: (symbol: string) => void,
   removeFromStocks: (symbol: string) => void,
   setModal: (title: string, description: string) => void,
 ) => {
@@ -14,7 +12,6 @@ export const createCheckboxObserver = (
     next: async (e: Event) => {
       const target = e.target as HTMLInputElement;
       if (target.checked) {
-        addToWatchlist(stock);
         await fetchStockData([stock.symbol])
           .then((data) => {
             if (data) {
@@ -31,7 +28,6 @@ export const createCheckboxObserver = (
             console.error(err);
           });
       } else {
-        removeFromWatchlist(stock.symbol);
         removeFromStocks(stock.symbol);
       }
     },

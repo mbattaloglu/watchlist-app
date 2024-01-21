@@ -1,15 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import {
-  WatchlistContext,
-  WatchlistProvider,
-} from "../../contexts/watchlistContext/watchlist.context";
-import {
   StockContext,
   StockProvider,
 } from "../../contexts/stockContext/stock.context";
 import WatchlistTable from "./watchlist-table.component";
 import { ModalProvider } from "../../contexts/modalContext/modal.context";
-import mockWatchlist from "../../mocks/mockWatchlist";
 import mockStockRecord from "../../mocks/mockStockRecord";
 
 describe("watchlist-table test suite", () => {
@@ -20,39 +15,28 @@ describe("watchlist-table test suite", () => {
   });
   it("should render the component when contexts are not empty", () => {
     const { container } = render(
-      <WatchlistContext.Provider
+      <StockContext.Provider
         value={{
-          watchlist: mockWatchlist,
-          addToWatchlist: jest.fn(),
-          removeFromWatchlist: jest.fn(),
-          cleanWatchlist: jest.fn(),
+          stocks: mockStockRecord.stocks,
+          addToStocks: jest.fn(),
+          removeFromStocks: jest.fn(),
+          cleanStocks: jest.fn(),
         }}
       >
-        <StockContext.Provider
-          value={{
-            stocks: mockStockRecord.stocks,
-            addToStocks: jest.fn(),
-            removeFromStocks: jest.fn(),
-            cleanStocks: jest.fn(),
-          }}
-        >
-          <ModalProvider>
-            <WatchlistTable />
-          </ModalProvider>
-        </StockContext.Provider>
-      </WatchlistContext.Provider>,
+        <ModalProvider>
+          <WatchlistTable />
+        </ModalProvider>
+      </StockContext.Provider>,
     );
     expect(container).toBeTruthy();
   });
   it("should render the component when contexts are empty", () => {
     const { container } = render(
-      <WatchlistProvider>
-        <StockProvider>
-          <ModalProvider>
-            <WatchlistTable />
-          </ModalProvider>
-        </StockProvider>
-      </WatchlistProvider>,
+      <StockProvider>
+        <ModalProvider>
+          <WatchlistTable />
+        </ModalProvider>
+      </StockProvider>,
     );
     expect(container).toBeTruthy();
     //test is there a table element

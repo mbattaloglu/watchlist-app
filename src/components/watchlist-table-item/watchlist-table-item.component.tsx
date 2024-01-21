@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
 import styles from "./watchlist-table.module.scss";
-import { WatchlistContext } from "../../contexts/watchlistContext/watchlist.context";
 import { fromEvent } from "rxjs";
 import { StockContext } from "../../contexts/stockContext/stock.context";
 import { StockAPIStock } from "../../types/StockAPIResult";
@@ -14,11 +13,9 @@ type WatchlistTableItemProps = {
 
 const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
   const removeButtonRef = useRef<HTMLButtonElement>(null);
-  const watchlistContext = useContext(WatchlistContext);
   const stockContext = useContext(StockContext);
   const modalContext = useContext(ModalContext);
 
-  const { removeFromWatchlist } = watchlistContext;
   const { removeFromStocks } = stockContext;
   const { setModal } = modalContext;
 
@@ -29,7 +26,6 @@ const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
       const removeObserver = createRemoveButtonObserver(
         stock.symbol,
         removeFromStocks,
-        removeFromWatchlist,
         setModal,
       );
 

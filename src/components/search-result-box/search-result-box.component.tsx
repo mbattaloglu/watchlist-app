@@ -4,10 +4,10 @@ import SearchResultBoxItem from "../search-result-box-item/search-result-box-ite
 import styles from "./search-result.box.module.scss";
 
 type SearchResultBoxProps = {
-  apiSearchResults: SearchAPIResult | null;
-  error: Error | null;
-  loading: boolean;
-  resultBox: React.RefObject<HTMLDivElement>;
+  readonly apiSearchResults: SearchAPIResult | null;
+  readonly error: Error | null;
+  readonly loading: boolean;
+  readonly resultBox: React.RefObject<HTMLDivElement>;
 };
 
 const SearchResultBox: React.FC<SearchResultBoxProps> = ({

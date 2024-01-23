@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import styles from "./search-result-box-item.module.scss";
 import { SearchAPIStock } from "../../types/SearchAPIResult";
 import { fromEvent } from "rxjs";
@@ -18,9 +18,12 @@ const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
   const { stocks, addToStocks, removeFromStocks } = stockContext;
   const { setModal } = modalContext;
 
-  const isChecked = (stock: SearchAPIStock) => {
-    return stocks.some((s) => s.symbol === stock.symbol);
-  };
+  const isChecked = useCallback(
+    (stock: SearchAPIStock) => {
+      return stocks.some((s) => s.symbol === stock.symbol);
+    },
+    [stocks],
+  );
 
   useEffect(() => {
     if (checkboxRef.current) {

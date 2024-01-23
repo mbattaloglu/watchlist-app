@@ -8,7 +8,7 @@ import giveColor from "../../utils/giveColor/giveColor";
 import { createRemoveButtonObserver } from "./observers/watchlist-table-item.observer";
 
 type WatchlistTableItemProps = {
-  stock: StockAPIStock;
+  readonly stock: StockAPIStock;
 };
 
 const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
@@ -18,6 +18,8 @@ const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
 
   const { removeFromStocks } = stockContext;
   const { setModal } = modalContext;
+
+  const xSymbol = "\u2715"; //HTML Entity https://www.toptal.com/designers/htmlarrows/symbols/multiplication-x/
 
   useEffect(() => {
     if (removeButtonRef.current) {
@@ -53,7 +55,7 @@ const WatchlistTableItem: React.FC<WatchlistTableItemProps> = ({ stock }) => {
       </td>
       <td>
         <button className={styles["remove-button"]} ref={removeButtonRef}>
-          &#10005;
+          {xSymbol}
         </button>
       </td>
     </tr>

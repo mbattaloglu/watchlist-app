@@ -16,9 +16,9 @@ import {
 } from "./observers/search-input.observers";
 
 type SearchInputProps = {
-  callApi: (searchText: string) => void;
-  setLoading: (loading: boolean) => void;
-  resultBox: React.RefObject<HTMLDivElement>;
+  readonly callApi: (searchText: string) => void;
+  readonly setLoading: (loading: boolean) => void;
+  readonly resultBox: React.RefObject<HTMLDivElement>;
 };
 
 const SearchInput: React.FC<SearchInputProps> = ({

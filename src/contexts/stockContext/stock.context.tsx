@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { StockAPIStock } from "../../types/StockAPIResult";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
 import { ModalContext } from "../modalContext/modal.context";
@@ -38,64 +38,64 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
   const modalContext = useContext(ModalContext);
   const { setModal } = modalContext;
 
-  //useEffect(() => {
-  //   const stocksFromLocalStorage = localStorage.getItem("stocks");
-  //   if (stocksFromLocalStorage) {
-  //     const parsed: StockLocalStorage = JSON.parse(stocksFromLocalStorage);
+  useEffect(() => {
+    const stocksFromLocalStorage = localStorage.getItem("stocks");
+    if (stocksFromLocalStorage) {
+      const parsed: StockLocalStorage = JSON.parse(stocksFromLocalStorage);
 
-  //     const now = new Date();
-  //     const lastSaved = new Date(parsed.lastSaved);
+      const now = new Date();
+      const lastSaved = new Date(parsed.lastSaved);
 
-  //     //if now-lastSaved > 1 day, fetch new data
-  //     const diff = now.getTime() - lastSaved.getTime(); //ms
-  //     const diffInDays = diff / (1000 * 60 * 60 * 24); //ms * s * h * d  -> convert to days;
+      //if now-lastSaved > 1 day, fetch new data
+      const diff = now.getTime() - lastSaved.getTime(); //ms
+      const diffInDays = diff / (1000 * 60 * 60 * 24); //ms * s * h * d  -> convert to days;
 
-  //     if (diffInDays > 1) {
-  //       const symbols = parsed.stocks.map((s) => s.symbol);
-  //       fetchStockData(symbols).then((data) => {
-  //         const updatedStocks = data.quoteResponse?.result?.filter(
-  //           (s) => s !== null
-  //         );
-  //         if (!updatedStocks) return;
-  //         const stocks: StockLocalStorage = {
-  //           stocks: updatedStocks,
-  //           lastSaved: new Date(),
-  //         };
-  //         localStorage.setItem("stocks", JSON.stringify(stocks));
-  //         setStocks(updatedStocks);
-  //       });
-  //     } else {
-  //       setStocks(parsed.stocks);
-  //     }
-  //   } else {
-  //     const stocks: StockLocalStorage = {
-  //       stocks: [],
-  //       lastSaved: new Date(),
-  //     };
-  //     localStorage.setItem("stocks", JSON.stringify(stocks));
-  //   }
-  // }, []);
+      if (diffInDays > 1) {
+        const symbols = parsed.stocks.map((s) => s.symbol);
+        fetchStockData(symbols).then((data) => {
+          const updatedStocks = data.quoteResponse?.result?.filter(
+            (s) => s !== null,
+          );
+          if (!updatedStocks) return;
+          const localStorageRecord: StockLocalStorage = {
+            stocks: updatedStocks,
+            lastSaved: new Date(),
+          };
+          localStorage.setItem("stocks", JSON.stringify(localStorageRecord));
+          stocks.next(updatedStocks);
+        });
+      } else {
+        stocks.next(parsed.stocks);
+      }
+    } else {
+      const stocks: StockLocalStorage = {
+        stocks: [],
+        lastSaved: new Date(),
+      };
+      localStorage.setItem("stocks", JSON.stringify(stocks));
+    }
+  }, []);
 
   const addToStocks = (symbol: string): void => {
     fetchStockData([symbol])
       .then((data) => {
-        // setStocks((prevStocks) => {
-        //   if (data.quoteResponse) {
-        //     const updatedStocks = [...prevStocks, data.quoteResponse.result[0]];
-        //     const stocks: StockLocalStorage = {
-        //       stocks: updatedStocks,
-        //       lastSaved: new Date(),
-        //     };
-        //     localStorage.setItem("stocks", JSON.stringify(stocks));
-        //     return updatedStocks;
-        //   } else {
-        //     setModal("Error", "Stock cannot be added.");
-        //     return prevStocks;
-        //   }
-        // });
         if (data.quoteResponse) {
           const currentStocks = stocks.getValue();
-          stocks.next([...currentStocks, data.quoteResponse.result[0]]);
+          const apiResult = data.quoteResponse.result[0];
+          const newStock: StockAPIStock = {
+            symbol: apiResult.symbol,
+            longName: apiResult.longName,
+            regularMarketChange: apiResult.regularMarketChange,
+            regularMarketPrice: apiResult.regularMarketPrice,
+            shortName: apiResult.shortName,
+          };
+          const updatedStocks = [...currentStocks, newStock];
+          const localStorageRecord: StockLocalStorage = {
+            stocks: updatedStocks,
+            lastSaved: new Date(),
+          };
+          localStorage.setItem("stocks", JSON.stringify(localStorageRecord));
+          stocks.next(updatedStocks);
         } else {
           const error = data.error ? "" + data.error : "";
           setModal("Error", "Stock cannot be added" + error);
@@ -108,17 +108,14 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
   };
 
   const removeFromStocks = (symbol: string) => {
-    // setStocks((prevStocks) => {
-    //   const updatedStocks = prevStocks.filter((s) => s.symbol !== symbol);
-    //   const stocks: StockLocalStorage = {
-    //     stocks: updatedStocks,
-    //     lastSaved: new Date(),
-    //   };
-    //   localStorage.setItem("stocks", JSON.stringify(stocks));
-    //   return updatedStocks;
-    // });
     const currentStocks = stocks.getValue();
-    stocks.next(currentStocks.filter((s) => s.symbol !== symbol));
+    const updatedStocks = currentStocks.filter((s) => s.symbol !== symbol);
+    const localStorageRecord: StockLocalStorage = {
+      stocks: updatedStocks,
+      lastSaved: new Date(),
+    };
+    localStorage.setItem("stocks", JSON.stringify(localStorageRecord));
+    stocks.next(updatedStocks);
   };
 
   const cleanStocks = () => {
@@ -126,7 +123,6 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
       stocks: [],
       lastSaved: new Date(),
     };
-    //setStocks([]);
     stocks.next([]);
     localStorage.setItem("stocks", JSON.stringify(localStorageRecord));
   };

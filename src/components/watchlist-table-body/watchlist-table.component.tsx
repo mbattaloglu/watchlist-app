@@ -1,22 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import WatchlistTableItem from "../watchlist-table-item/watchlist-table-item.component";
 import { StockContext } from "../../contexts/stockContext/stock.context";
-import { StockAPIStock } from "../../types/StockAPIResult";
+import { useObservableState } from "observable-hooks";
 
 const WatchlistTableBody: React.FC = () => {
   const stockContext = useContext(StockContext);
-  const [stocksData, setStocksData] = useState<StockAPIStock[]>([]);
   const { stocks } = stockContext;
-
-  useEffect(() => {
-    const sub = stocks.subscribe(setStocksData);
-
-    return () => sub.unsubscribe();
-  }, []);
+  const x = useObservableState(stocks, []);
 
   return (
     <tbody>
-      {stocksData.map((stock) => (
+      {x.map((stock) => (
         <WatchlistTableItem stock={stock} key={stock.symbol} />
       ))}
     </tbody>

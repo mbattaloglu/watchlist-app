@@ -1,12 +1,12 @@
 import commonStyles from "../../styles/common-styles.module.scss";
 import WatchlistTable from "../../components/watchlist-table/watchlist-table.component";
 import styles from "./watchlist.module.scss";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { StockContext } from "../../contexts/stockContext/stock.context";
 import { fromEvent } from "rxjs";
 import { ModalContext } from "../../contexts/modalContext/modal.context";
 import ErrorModal from "../../components/error-modal/error-modal.component";
-import { StockAPIStock } from "../../types/StockAPIResult";
+import { useObservableState } from "observable-hooks";
 
 const Watchlist: React.FC = () => {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -15,13 +15,10 @@ const Watchlist: React.FC = () => {
   const modalContext = useContext(ModalContext);
 
   const { cleanStocks, stocks } = stockContext;
+  const stocksState = useObservableState(stocks, []);
   const { setModal, modal, closeModal } = modalContext;
 
-  const [stocksData, setStocksData] = useState<StockAPIStock[]>([]);
-
   useEffect(() => {
-    const stocksSub = stocks.subscribe(setStocksData);
-
     if (buttonRef.current) {
       const buttonObservable$ = fromEvent(buttonRef.current, "click");
       const buttonObserver = {
@@ -38,14 +35,13 @@ const Watchlist: React.FC = () => {
       const buttonSubscription = buttonObservable$.subscribe(buttonObserver);
 
       return () => {
-        stocksSub.unsubscribe();
         buttonSubscription.unsubscribe();
       };
     }
   }, []);
 
   const showButton = () => {
-    if (stocksData.length > 0) {
+    if (stocksState.length > 0) {
       return { display: "block" };
     } else {
       return { display: "none" };

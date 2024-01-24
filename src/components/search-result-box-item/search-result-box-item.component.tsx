@@ -1,10 +1,11 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styles from "./search-result-box-item.module.scss";
 import { SearchAPIStock } from "../../types/SearchAPIResult";
 import { fromEvent } from "rxjs";
 import { StockContext } from "../../contexts/stockContext/stock.context";
 import { ModalContext } from "../../contexts/modalContext/modal.context";
 import { createCheckboxObserver } from "./observers/search-result-item-observers";
+import { StockAPIStock } from "../../types/StockAPIResult";
 
 type SearchResultBoxItemProps = {
   stock: SearchAPIStock;
@@ -18,14 +19,18 @@ const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
   const { stocks, addToStocks, removeFromStocks } = stockContext;
   const { setModal } = modalContext;
 
+  const [stocksData, setStocksData] = useState<StockAPIStock[]>([]);
+
   const isChecked = useCallback(
     (stock: SearchAPIStock) => {
-      return stocks.some((s) => s.symbol === stock.symbol);
+      return stocksData.some((s) => s.symbol === stock.symbol);
     },
-    [stocks],
+    [stocksData],
   );
 
   useEffect(() => {
+    const stocksSub = stocks.subscribe(setStocksData);
+
     if (checkboxRef.current) {
       const checkboxObservable$ = fromEvent(checkboxRef.current, "change");
       const checkboxObserver = createCheckboxObserver(
@@ -39,7 +44,10 @@ const SearchResultBoxItem: React.FC<SearchResultBoxItemProps> = ({ stock }) => {
         checkboxObservable$.subscribe(checkboxObserver);
 
       //clean up when unmount
-      return () => checkboxSubscription.unsubscribe();
+      return () => {
+        stocksSub.unsubscribe();
+        checkboxSubscription.unsubscribe();
+      };
     }
   }, []);
 

@@ -2,9 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { StockAPIStock } from "../../types/StockAPIResult";
 import fetchStockData from "../../utils/fetchStockData/fetchStockData";
 import { ModalContext } from "../modalContext/modal.context";
+import { BehaviorSubject } from "rxjs";
 
 type StockContextProps = {
-  stocks: StockAPIStock[];
+  stocks: BehaviorSubject<StockAPIStock[]>;
   addToStocks: (symbol: string) => void;
   removeFromStocks: (symbol: string) => void;
   cleanStocks: () => void;
@@ -20,7 +21,7 @@ type StockLocalStorage = {
 };
 
 const StockContext = createContext<StockContextProps>({
-  stocks: [],
+  stocks: new BehaviorSubject<StockAPIStock[]>([]),
   addToStocks: () => {
     throw new Error("StockContext not initialized.");
   },
@@ -33,65 +34,72 @@ const StockContext = createContext<StockContextProps>({
 });
 
 const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
-  const [stocks, setStocks] = useState<StockAPIStock[]>([]);
+  const stocks = new BehaviorSubject<StockAPIStock[]>([]);
   const modalContext = useContext(ModalContext);
   const { setModal } = modalContext;
 
-  useEffect(() => {
-    const stocksFromLocalStorage = localStorage.getItem("stocks");
-    if (stocksFromLocalStorage) {
-      const parsed: StockLocalStorage = JSON.parse(stocksFromLocalStorage);
+  //useEffect(() => {
+  //   const stocksFromLocalStorage = localStorage.getItem("stocks");
+  //   if (stocksFromLocalStorage) {
+  //     const parsed: StockLocalStorage = JSON.parse(stocksFromLocalStorage);
 
-      const now = new Date();
-      const lastSaved = new Date(parsed.lastSaved);
+  //     const now = new Date();
+  //     const lastSaved = new Date(parsed.lastSaved);
 
-      //if now-lastSaved > 1 day, fetch new data
-      const diff = now.getTime() - lastSaved.getTime(); //ms
-      const diffInDays = diff / (1000 * 60 * 60 * 24); //ms * s * h * d  -> convert to days;
+  //     //if now-lastSaved > 1 day, fetch new data
+  //     const diff = now.getTime() - lastSaved.getTime(); //ms
+  //     const diffInDays = diff / (1000 * 60 * 60 * 24); //ms * s * h * d  -> convert to days;
 
-      if (diffInDays > 1) {
-        const symbols = parsed.stocks.map((s) => s.symbol);
-        fetchStockData(symbols).then((data) => {
-          const updatedStocks = data.quoteResponse?.result?.filter(
-            (s) => s !== null,
-          );
-          if (!updatedStocks) return;
-          const stocks: StockLocalStorage = {
-            stocks: updatedStocks,
-            lastSaved: new Date(),
-          };
-          localStorage.setItem("stocks", JSON.stringify(stocks));
-          setStocks(updatedStocks);
-        });
-      } else {
-        setStocks(parsed.stocks);
-      }
-    } else {
-      const stocks: StockLocalStorage = {
-        stocks: [],
-        lastSaved: new Date(),
-      };
-      localStorage.setItem("stocks", JSON.stringify(stocks));
-    }
-  }, []);
+  //     if (diffInDays > 1) {
+  //       const symbols = parsed.stocks.map((s) => s.symbol);
+  //       fetchStockData(symbols).then((data) => {
+  //         const updatedStocks = data.quoteResponse?.result?.filter(
+  //           (s) => s !== null
+  //         );
+  //         if (!updatedStocks) return;
+  //         const stocks: StockLocalStorage = {
+  //           stocks: updatedStocks,
+  //           lastSaved: new Date(),
+  //         };
+  //         localStorage.setItem("stocks", JSON.stringify(stocks));
+  //         setStocks(updatedStocks);
+  //       });
+  //     } else {
+  //       setStocks(parsed.stocks);
+  //     }
+  //   } else {
+  //     const stocks: StockLocalStorage = {
+  //       stocks: [],
+  //       lastSaved: new Date(),
+  //     };
+  //     localStorage.setItem("stocks", JSON.stringify(stocks));
+  //   }
+  // }, []);
 
   const addToStocks = (symbol: string): void => {
     fetchStockData([symbol])
       .then((data) => {
-        setStocks((prevStocks) => {
-          if (data.quoteResponse) {
-            const updatedStocks = [...prevStocks, data.quoteResponse.result[0]];
-            const stocks: StockLocalStorage = {
-              stocks: updatedStocks,
-              lastSaved: new Date(),
-            };
-            localStorage.setItem("stocks", JSON.stringify(stocks));
-            return updatedStocks;
-          } else {
-            setModal("Error", "Stock cannot be added.");
-            return prevStocks;
-          }
-        });
+        // setStocks((prevStocks) => {
+        //   if (data.quoteResponse) {
+        //     const updatedStocks = [...prevStocks, data.quoteResponse.result[0]];
+        //     const stocks: StockLocalStorage = {
+        //       stocks: updatedStocks,
+        //       lastSaved: new Date(),
+        //     };
+        //     localStorage.setItem("stocks", JSON.stringify(stocks));
+        //     return updatedStocks;
+        //   } else {
+        //     setModal("Error", "Stock cannot be added.");
+        //     return prevStocks;
+        //   }
+        // });
+        if (data.quoteResponse) {
+          const currentStocks = stocks.getValue();
+          stocks.next([...currentStocks, data.quoteResponse.result[0]]);
+        } else {
+          const error = data.error ? "" + data.error : "";
+          setModal("Error", "Stock cannot be added" + error);
+        }
       })
       .catch((error: Error) => {
         setModal("Error", `Stock cannot be added.\n${error}`);
@@ -100,24 +108,27 @@ const StockProvider: React.FC<StockProviderProps> = ({ children }) => {
   };
 
   const removeFromStocks = (symbol: string) => {
-    setStocks((prevStocks) => {
-      const updatedStocks = prevStocks.filter((s) => s.symbol !== symbol);
-      const stocks: StockLocalStorage = {
-        stocks: updatedStocks,
-        lastSaved: new Date(),
-      };
-      localStorage.setItem("stocks", JSON.stringify(stocks));
-      return updatedStocks;
-    });
+    // setStocks((prevStocks) => {
+    //   const updatedStocks = prevStocks.filter((s) => s.symbol !== symbol);
+    //   const stocks: StockLocalStorage = {
+    //     stocks: updatedStocks,
+    //     lastSaved: new Date(),
+    //   };
+    //   localStorage.setItem("stocks", JSON.stringify(stocks));
+    //   return updatedStocks;
+    // });
+    const currentStocks = stocks.getValue();
+    stocks.next(currentStocks.filter((s) => s.symbol !== symbol));
   };
 
   const cleanStocks = () => {
-    const stocks: StockLocalStorage = {
+    const localStorageRecord: StockLocalStorage = {
       stocks: [],
       lastSaved: new Date(),
     };
-    setStocks([]);
-    localStorage.setItem("stocks", JSON.stringify(stocks));
+    //setStocks([]);
+    stocks.next([]);
+    localStorage.setItem("stocks", JSON.stringify(localStorageRecord));
   };
 
   return (
